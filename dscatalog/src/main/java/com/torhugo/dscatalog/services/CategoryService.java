@@ -1,6 +1,5 @@
 package com.torhugo.dscatalog.services;
 
-import java.lang.StackWalker.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.torhugo.dscatalog.dto.CategoryDTO;
 import com.torhugo.dscatalog.entities.Category;
 import com.torhugo.dscatalog.repositories.CategoryRepository;
+import com.torhugo.dscatalog.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -30,7 +30,7 @@ public class CategoryService {
 	public CategoryDTO findById(Long id) {
 		
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.get();
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found!"));
 		
 		return new CategoryDTO(entity);
 	}
