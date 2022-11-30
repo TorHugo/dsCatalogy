@@ -1,16 +1,16 @@
-package com.torhugo.dscatalog.resource.exception;
+package com.torhugo.dscatalog.exception;
 
 import java.time.Instant;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.torhugo.dscatalog.services.exceptions.DataBaseException;
+import com.torhugo.dscatalog.exception.impl.DataBaseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import com.torhugo.dscatalog.services.exceptions.ResourceNotFoundException;
+import com.torhugo.dscatalog.exception.impl.ResourceNotFoundException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {

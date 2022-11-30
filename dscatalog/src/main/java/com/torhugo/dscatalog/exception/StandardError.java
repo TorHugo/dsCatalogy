@@ -1,4 +1,4 @@
-package com.torhugo.dscatalog.resource.exception;
+package com.torhugo.dscatalog.exception;
 
 import java.io.Serializable;
 import java.time.Instant;

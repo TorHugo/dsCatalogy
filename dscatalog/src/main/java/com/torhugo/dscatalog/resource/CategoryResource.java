@@ -3,14 +3,13 @@ package com.torhugo.dscatalog.resource;
 import java.net.URI;
 import java.util.List;
 
-import com.torhugo.dscatalog.entities.Category;
+import com.torhugo.dscatalog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.torhugo.dscatalog.dto.CategoryDTO;
-import com.torhugo.dscatalog.services.CategoryService;
+import com.torhugo.dscatalog.model.dto.CategoryDTO;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController

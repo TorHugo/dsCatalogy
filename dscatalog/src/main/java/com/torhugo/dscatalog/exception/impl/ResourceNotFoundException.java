@@ -1,4 +1,4 @@
-package com.torhugo.dscatalog.services.exceptions;
+package com.torhugo.dscatalog.exception.impl;
 
 public class ResourceNotFoundException extends RuntimeException{
 	private static final long serialVersionUID = 1L;

@@ -1,6 +1,6 @@
-package com.torhugo.dscatalog.dto;
+package com.torhugo.dscatalog.model.dto;
 
-import com.torhugo.dscatalog.entities.Category;
+import com.torhugo.dscatalog.model.entities.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

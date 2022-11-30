@@ -1,4 +1,4 @@
-package com.torhugo.dscatalog.entities;
+package com.torhugo.dscatalog.model.entities;
 
 import java.io.Serializable;
 
