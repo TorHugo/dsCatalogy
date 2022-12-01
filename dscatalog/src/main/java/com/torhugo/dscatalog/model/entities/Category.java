@@ -1,12 +1,9 @@
 package com.torhugo.dscatalog.model.entities;
 
 import java.io.Serializable;
+import java.time.Instant;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -23,4 +20,18 @@ public class Category implements Serializable{
 	
 	private String name;
 
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant createdAt;
+
+	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+	private Instant updatedAt;
+
+	@PrePersist
+	public void prePersist(){
+		createdAt = Instant.now();
+	}
+	@PreUpdate
+	public void preUpdate(){
+		updatedAt = Instant.now();
+	}
 }
