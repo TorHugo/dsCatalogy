@@ -175,7 +175,7 @@
 | `id`      | `integer` | O ID do produto que você quer deletar. |
 
 ## **_Collection_**:
-[Collection Postman](/collection/BootCamp-DevSuperior.json).
+[Collection Postman](/collection/).
 
 ## _**Autor**_:
 
