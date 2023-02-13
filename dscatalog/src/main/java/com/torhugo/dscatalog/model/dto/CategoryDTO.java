@@ -3,6 +3,7 @@ package com.torhugo.dscatalog.model.dto;
 import com.torhugo.dscatalog.model.entities.CategoryModel;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Getter
@@ -16,6 +17,7 @@ public class CategoryDTO implements Serializable {
 
 
 	private Long id;
+	@NotBlank(message = "Requeired field!")
 	private String name;
 	
 	public CategoryDTO(CategoryModel entity) {
