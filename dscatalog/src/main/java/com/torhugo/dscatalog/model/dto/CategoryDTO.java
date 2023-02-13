@@ -1,15 +1,18 @@
 package com.torhugo.dscatalog.model.dto;
 
 import com.torhugo.dscatalog.model.entities.CategoryModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
+import java.io.Serializable;
+
+@Getter
+@Setter
 @NoArgsConstructor
-@Getter @Setter
-public class CategoryDTO {
+@AllArgsConstructor
+@Builder
+public class CategoryDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 
 	private Long id;

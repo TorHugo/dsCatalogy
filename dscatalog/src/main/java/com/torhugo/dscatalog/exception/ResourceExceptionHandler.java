@@ -1,6 +1,7 @@
 package com.torhugo.dscatalog.exception;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +28,7 @@ public class ResourceExceptionHandler {
 		err.setError("Resource not found.");
 		err.setMessage(exception.getMessage());
 		err.setPath(request.getRequestURI());
-		
+
 		return ResponseEntity.status(notFound).body(err);
 	}
 

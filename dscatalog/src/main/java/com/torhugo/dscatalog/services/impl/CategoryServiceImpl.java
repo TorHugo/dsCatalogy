@@ -56,9 +56,9 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	public CategoryDTO update(Long id, CategoryDTO dto) {
 		try {
-			CategoryModel entity = repository.getOne(id);
-			entity.setName(dto.getName());
-			entity = repository.save(entity);
+			CategoryModel entity = findByIdCategory(id);
+			entity = categoryUtils.mapper(dto);
+			repository.save(entity);
 
 			return new CategoryDTO(entity);
 		} catch (EntityNotFoundException e){
@@ -74,5 +74,9 @@ public class CategoryServiceImpl implements CategoryService {
 		} catch (DataIntegrityViolationException e){
 			throw new DataBaseException("Integrity violation!");
 		}
+	}
+
+	private CategoryModel findByIdCategory(final Long idCategory){
+		return repository.findById(idCategory).orElseThrow(() -> new DataBaseException("Entity not found."));
 	}
 }
