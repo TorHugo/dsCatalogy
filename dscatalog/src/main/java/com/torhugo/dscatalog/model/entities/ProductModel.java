@@ -11,7 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_product")
 @Data
-public class Product implements Serializable {
+public class ProductModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,5 +36,5 @@ public class Product implements Serializable {
         joinColumns = @JoinColumn(name = "product_id"), // referencia a classe produto
         inverseJoinColumns = @JoinColumn(name = "category_id") // referencia a fk da tabela da associação
     ) // faz a associação entre as tabelas
-    Set<Category> categories = new HashSet<>();
+    Set<CategoryModel> categories = new HashSet<>();
 }

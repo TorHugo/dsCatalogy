@@ -4,7 +4,7 @@ import com.torhugo.dscatalog.exception.impl.DataBaseException;
 import com.torhugo.dscatalog.exception.impl.ResourceNotFoundException;
 import com.torhugo.dscatalog.mapper.ProductMapper;
 import com.torhugo.dscatalog.model.dto.ProductDTO;
-import com.torhugo.dscatalog.model.entities.Product;
+import com.torhugo.dscatalog.model.entities.ProductModel;
 import com.torhugo.dscatalog.repository.ProductRepository;
 import com.torhugo.dscatalog.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,21 +30,21 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
 		
-		Page<Product> list = repository.findAll(pageRequest);
+		Page<ProductModel> list = repository.findAll(pageRequest);
 		return list.map(ProductDTO::new);
 	}
 
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
-		Optional<Product> obj = repository.findById(id);
-		Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
+		Optional<ProductModel> obj = repository.findById(id);
+		ProductModel entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
 		
 		return new ProductDTO(entity, entity.getCategories());
 	}
 
 	@Transactional
     public ProductDTO insert(ProductDTO dto) {
-		Product entity = new Product();
+		ProductModel entity = new ProductModel();
 		entity = productUtils.mapper(dto);
 		repository.save(entity);
 
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		try {
-			Product entity = repository.getOne(id);
+			ProductModel entity = repository.getOne(id);
 			entity.setName(dto.getName());
 			entity = repository.save(entity);
 

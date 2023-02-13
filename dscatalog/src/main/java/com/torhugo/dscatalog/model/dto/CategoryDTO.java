@@ -1,7 +1,6 @@
 package com.torhugo.dscatalog.model.dto;
 
-import com.torhugo.dscatalog.model.entities.Category;
-
+import com.torhugo.dscatalog.model.entities.CategoryModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +15,7 @@ public class CategoryDTO {
 	private Long id;
 	private String name;
 	
-	public CategoryDTO(Category entity) {
+	public CategoryDTO(CategoryModel entity) {
 		this.id = entity.getId();
 		this.name = entity.getName();
 	}

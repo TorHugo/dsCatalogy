@@ -1,7 +1,7 @@
 package com.torhugo.dscatalog.model.dto;
 
-import com.torhugo.dscatalog.model.entities.Category;
-import com.torhugo.dscatalog.model.entities.Product;
+import com.torhugo.dscatalog.model.entities.CategoryModel;
+import com.torhugo.dscatalog.model.entities.ProductModel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class ProductDTO {
 
     private List<CategoryDTO> lsCategories = new ArrayList<>();
 
-    public ProductDTO(Product entity) {
+    public ProductDTO(ProductModel entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
@@ -36,7 +36,7 @@ public class ProductDTO {
         this.date = entity.getDate();
     }
 
-    public ProductDTO(Product entity, Set<Category> categories){
+    public ProductDTO(ProductModel entity, Set<CategoryModel> categories){
         this(entity);
         categories.forEach(
                 category -> this.lsCategories.add(new CategoryDTO(category))
