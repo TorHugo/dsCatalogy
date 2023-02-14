@@ -4,9 +4,11 @@ import com.torhugo.dscatalog.exception.impl.DataBaseException;
 import com.torhugo.dscatalog.exception.impl.ResourceNotFoundException;
 import com.torhugo.dscatalog.mapper.ProductMapper;
 import com.torhugo.dscatalog.model.dto.ProductDTO;
+import com.torhugo.dscatalog.model.entities.CategoryModel;
 import com.torhugo.dscatalog.model.entities.ProductModel;
 import com.torhugo.dscatalog.repository.ProductRepository;
 import com.torhugo.dscatalog.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -20,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
@@ -29,49 +32,59 @@ public class ProductServiceImpl implements ProductService {
 	private ProductMapper productUtils;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(Pageable pageRequest){
-		
+	public Page<ProductDTO> findAllPaged(final Pageable pageRequest){
+		log.info("1. Searching products in the database by page {} and size {}.", pageRequest.getPageNumber(), pageRequest.getPageSize());
 		Page<ProductModel> list = repository.findAll(pageRequest);
+
 		return list.map(ProductDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public ProductDTO findById(Long id) {
-		Optional<ProductModel> obj = repository.findById(id);
-		ProductModel entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
+	public ProductDTO findById(final Long idProduct) {
+		log.info("1. Searching product in the database by category id {}", idProduct);
+		ProductModel entity = findByIdProduct(idProduct);
 		
 		return new ProductDTO(entity, entity.getCategories());
 	}
 
 	@Transactional
-    public ProductDTO insert(ProductDTO dto) {
-		ProductModel entity = new ProductModel();
-		entity = productUtils.mapper(dto);
+    public ProductDTO insert(final ProductDTO dto) {
+		log.info("1. Mapping the product.");
+		ProductModel entity = productUtils.mapper(dto);
+		log.info("2. Saving category in the database.");
 		repository.save(entity);
 
 		return new ProductDTO(entity);
     }
 
 	@Transactional
-	public ProductDTO update(Long id, ProductDTO dto) {
+	public ProductDTO update(final Long idProduct, final ProductDTO dto) {
 		try {
-			ProductModel entity = repository.getOne(id);
-			entity.setName(dto.getName());
-			entity = repository.save(entity);
+			log.info("1. Searching product in the database, by product id {}", idProduct);
+			ProductModel entity = findByIdProduct(idProduct);
+			log.info("2. Mapping product.");
+			entity = productUtils.mapper(dto);
+			log.info("3. Saving product in the database.");
+			repository.save(entity);
 
 			return new ProductDTO(entity);
 		} catch (EntityNotFoundException e){
-			throw new ResourceNotFoundException("Id not found: " + id);
+			throw new ResourceNotFoundException("Id not found: " + idProduct);
 		}
 	}
 
-	public void delete(Long id) {
+	public void delete(Long idProduct) {
 		try {
-			repository.deleteById(id);
+			log.info("1. Deleting product from database.");
+			repository.deleteById(idProduct);
 		} catch (EmptyResultDataAccessException e){
-			throw new ResourceNotFoundException("Id not found: " + id);
+			throw new ResourceNotFoundException("Id not found: " + idProduct);
 		} catch (DataIntegrityViolationException e){
 			throw new DataBaseException("Integrity violation!");
 		}
+	}
+
+	private ProductModel findByIdProduct(final Long idProduct){
+		return repository.findById(idProduct).orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
 	}
 }

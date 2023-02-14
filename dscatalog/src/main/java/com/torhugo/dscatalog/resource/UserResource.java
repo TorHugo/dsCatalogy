@@ -30,9 +30,9 @@ public class UserResource {
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> findById(@PathVariable final Long id) {
-		UserDTO dto = service.findById(id);
+	@GetMapping(value = "/{idUser}")
+	public ResponseEntity<UserDTO> findById(@PathVariable final Long idUser) {
+		UserDTO dto = service.findById(idUser);
 		return ResponseEntity.ok().body(dto);
 	}
 
@@ -40,21 +40,22 @@ public class UserResource {
 	public ResponseEntity<UserDTO> insert(@Valid @RequestBody final UserFullDTO dto){
 		UserDTO newDTO = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-												.path("/{id}").buildAndExpand(newDTO.getIdUser()).toUri();
+												.path("/{idUser}").buildAndExpand(newDTO.getIdUser()).toUri();
 		return ResponseEntity.status(HttpStatus.CREATED).body(newDTO);
 	}
 
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserDTO dto){
+	@PutMapping(value = "/{idUser}")
+	public ResponseEntity<UserDTO> update(@PathVariable final Long idUser,
+										  @Valid @RequestBody final UserFullDTO dto){
 
-		dto = service.update(id, dto);
+		UserDTO newDTO = service.update(idUser, dto);
 		return ResponseEntity.ok().body(dto);
 	}
 
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> delete(@PathVariable Long id){
+	@DeleteMapping(value = "/{idUser}")
+	public ResponseEntity<UserDTO> delete(@PathVariable final Long idUser){
 
-		service.delete(id);
+		service.delete(idUser);
 		return ResponseEntity.noContent().build();
 	}
 }

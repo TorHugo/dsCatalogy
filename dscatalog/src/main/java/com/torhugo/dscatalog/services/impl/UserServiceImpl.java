@@ -8,6 +8,7 @@ import com.torhugo.dscatalog.model.dto.UserFullDTO;
 import com.torhugo.dscatalog.model.entities.UserModel;
 import com.torhugo.dscatalog.repository.UserRepository;
 import com.torhugo.dscatalog.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,6 +22,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository repository;
@@ -32,48 +34,56 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Transactional(readOnly = true)
-	public Page<UserDTO> findAllPaged(Pageable pageRequest){
-		
+	public Page<UserDTO> findAllPaged(final Pageable pageRequest){
+		log.info("1. Searching products in the database by page {} and size {}.", pageRequest.getPageNumber(), pageRequest.getPageSize());
 		Page<UserModel> list = repository.findAll(pageRequest);
 		return list.map(UserDTO::new);
 	}
 
 	@Transactional(readOnly = true)
-	public UserDTO findById(Long id) {
-		Optional<UserModel> obj = repository.findById(id);
-		UserModel entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found!"));
+	public UserDTO findById(final Long idUser) {
+		log.info("1. Searching product in the database by category id {}", idUser);
+		UserModel entity = findByIdUser(idUser);
 		
 		return new UserDTO(entity);
 	}
 
 	@Transactional
-    public UserDTO insert(UserFullDTO dto) {
-		UserModel entity = new UserModel();
-		entity = userMapper.mapper(dto);
+    public UserDTO insert(final UserFullDTO dto) {
+		log.info("1. Mapping the user.");
+		UserModel entity = userMapper.mapper(dto);
+		log.info("2. Encrypting user password.");
 		passwordEnconder(entity, dto.getPassword());
+		log.info("3. Saving user in the database.");
 		repository.save(entity);
 
 		return new UserDTO(entity);
     }
 
 	@Transactional
-	public UserDTO update(Long id, UserDTO dto) {
+	public UserDTO update(final Long idUser, final UserFullDTO dto) {
 		try {
-			UserModel entity = findByIdUser(id);
+			log.info("1. Searching user in the database, by user id {}", idUser);
+			UserModel entity = findByIdUser(idUser);
+			log.info("2. Mapping the user.");
 			entity = userMapper.mapper(dto);
+			log.info("3. Encrypting user password.");
+			passwordEnconder(entity, dto.getPassword());
+			log.info("4. Saving category in the database.");
 			repository.save(entity);
 
 			return new UserDTO(entity);
 		} catch (EntityNotFoundException e){
-			throw new ResourceNotFoundException("Id not found: " + id);
+			throw new ResourceNotFoundException("Id not found: " + idUser);
 		}
 	}
 
-	public void delete(Long id) {
+	public void delete(final Long idUser) {
 		try {
-			repository.deleteById(id);
+			log.info("1. Deleting user from database.");
+			repository.deleteById(idUser);
 		} catch (EmptyResultDataAccessException e){
-			throw new ResourceNotFoundException("Id not found: " + id);
+			throw new ResourceNotFoundException("Id not found: " + idUser);
 		} catch (DataIntegrityViolationException e){
 			throw new DataBaseException("Integrity violation!");
 		}

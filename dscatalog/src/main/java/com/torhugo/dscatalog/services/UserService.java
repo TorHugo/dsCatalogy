@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     public Page<UserDTO> findAllPaged(Pageable pageRequest);
-    public UserDTO findById(Long id);
+    public UserDTO findById(Long idUser);
     public UserDTO insert(UserFullDTO dto);
-    public UserDTO update(Long id, UserDTO dto);
-    public void delete(Long id);
+    public UserDTO update(Long idUser, UserFullDTO dto);
+    public void delete(Long idUser);
 }
