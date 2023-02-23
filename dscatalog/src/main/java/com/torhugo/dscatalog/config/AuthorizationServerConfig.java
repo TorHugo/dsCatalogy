@@ -1,6 +1,7 @@
 package com.torhugo.dscatalog.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private static final String keyAccess = "permitAll()";
     private static final String tokenAccess = "isAuthenticated()";
 
+    @Value("${security.oauth2.client.client-id}")
+    private String idClient;
+    @Value("${security.oauth2.client.client-secret}")
+    private String secretClient;
+    @Value("${jwt.duration}")
+    private Integer jwtDuration;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -40,11 +47,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("dscatalog")
-                .secret(passwordEncoder.encode("12345"))
+                .withClient(idClient)
+                .secret(passwordEncoder.encode(secretClient))
                 .scopes("read", "write")
                 .authorizedGrantTypes("password")
-                .accessTokenValiditySeconds(86400);
+                .accessTokenValiditySeconds(jwtDuration);
     }
 
     @Override

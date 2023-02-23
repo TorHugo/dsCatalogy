@@ -35,16 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/actuator/**");
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-//                .and()
-//                .csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.POST, "/oauth/token")
-//                .permitAll();
-//    }
-
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
