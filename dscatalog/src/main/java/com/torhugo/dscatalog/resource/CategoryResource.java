@@ -18,7 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/api/categories")
 public class CategoryResource {
 
 	@Autowired
