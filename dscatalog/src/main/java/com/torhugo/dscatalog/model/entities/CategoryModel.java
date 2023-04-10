@@ -2,7 +2,9 @@ package com.torhugo.dscatalog.model.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -30,7 +32,7 @@ public class CategoryModel implements Serializable{
 	private Instant updatedAt;
 
 	@ManyToMany(mappedBy = "categories")
-	private Set<ProductModel> products = new HashSet<>();
+	private List<ProductModel> products = new ArrayList<>();
 
 	@PrePersist
 	public void prePersist(){

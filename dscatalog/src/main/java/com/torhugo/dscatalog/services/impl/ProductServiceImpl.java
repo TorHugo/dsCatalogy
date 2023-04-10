@@ -6,6 +6,7 @@ import com.torhugo.dscatalog.mapper.ProductMapper;
 import com.torhugo.dscatalog.model.dto.ProductDTO;
 import com.torhugo.dscatalog.model.entities.CategoryModel;
 import com.torhugo.dscatalog.model.entities.ProductModel;
+import com.torhugo.dscatalog.repository.CategoryRepository;
 import com.torhugo.dscatalog.repository.ProductRepository;
 import com.torhugo.dscatalog.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,6 +30,9 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Autowired
 	private ProductRepository repository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Autowired
 	private ProductMapper productUtils;
@@ -49,25 +55,42 @@ public class ProductServiceImpl implements ProductService {
 
 	@Transactional
     public ProductDTO insert(final ProductDTO dto) {
-		log.info("1. Mapping the product.");
-		ProductModel entity = productUtils.mapper(dto);
-		log.info("2. Saving category in the database.");
+		List<CategoryModel> lsCategories = new ArrayList<>();
+
+		log.info("1. Searching categories in the database.");
+		dto.getLsCategories().forEach(category -> {
+			CategoryModel categoryModel =
+					categoryRepository.findById(category.getId()).orElseThrow(() -> new DataBaseException("Category not found! {}"));
+			lsCategories.add(categoryModel);
+		});
+
+		log.info("2. Mapping the product.");
+		ProductModel entity = productUtils.mapper(dto, lsCategories);
+
+		log.info("3. Saving category in the database.");
 		repository.save(entity);
 
-		return new ProductDTO(entity);
+		return new ProductDTO(entity, lsCategories);
     }
 
 	@Transactional
 	public ProductDTO update(final Long idProduct, final ProductDTO dto) {
 		try {
-			log.info("1. Searching product in the database, by product id {}", idProduct);
-			ProductModel entity = findByIdProduct(idProduct);
-			log.info("2. Mapping product.");
-			entity = productUtils.mapper(dto);
-			log.info("3. Saving product in the database.");
-			repository.save(entity);
+			List<CategoryModel> lsCategories = new ArrayList<>();
 
-			return new ProductDTO(entity);
+			log.info("1. Searching categories in the database.");
+			dto.getLsCategories().forEach(category -> {
+				CategoryModel categoryModel =
+						categoryRepository.getOne(category.getId());
+				lsCategories.add(categoryModel);
+			});
+
+			log.info("2. Mapping product.");
+			ProductModel productMapper =
+					repository.save(productUtils.mapper(idProduct, dto, lsCategories));
+
+			log.info("3. Saving product in the database.");
+			return new ProductDTO(productMapper, lsCategories);
 		} catch (EntityNotFoundException e){
 			throw new ResourceNotFoundException("Id not found: " + idProduct);
 		}
