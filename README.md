@@ -46,9 +46,8 @@
 | `password`   | `string`   | Senha do usuário para autenticar.                 |
 | `grant_type` | `string`   | Tipo do grant que será utilizado para autenticar. |
 
-- <h3>Exemplo de como utilizar no postman.</h3>
-  ![screenshot](/dscatalog/image/body_postman.png)
-  ![screenshot](/dscatalog/image/body_postman_variables.png)
+![screenshot](/dscatalog/image/body_postman.png)
+![screenshot](/dscatalog/image/body_postman_variables.png)
 
 ### _**Category**_:
 
